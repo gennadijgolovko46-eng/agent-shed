@@ -1,0 +1,67 @@
+{
+  "name": "agent-shed",
+  "main": "src/worker.mjs",
+  "compatibility_date": "2026-09-09",
+  "workers_dev": true,
+  "env": {
+    "transition": {
+      "vars": {
+        "ROLE": "transition",
+        "LEASE_MS": "15000"
+      },
+      "durable_objects": {
+        "bindings": [
+          { "name": "LINE", "class_name": "LineJournal" }
+        ]
+      },
+      "exports": {
+        "LineJournal": { "type": "durable-object", "storage": "sqlite" }
+      }
+    },
+    "a": {
+      "vars": {
+        "ROLE": "shell",
+        "SHELL_ID": "A",
+        "MAX_STEPS": "1"
+      },
+      "services": [
+        { "binding": "TRANSITION", "service": "agent-shed-transition" }
+      ]
+    },
+    "b": {
+      "vars": {
+        "ROLE": "shell",
+        "SHELL_ID": "B",
+        "MAX_STEPS": "1"
+      },
+      "services": [
+        { "binding": "TRANSITION", "service": "agent-shed-transition" }
+      ]
+    },
+    "c": {
+      "vars": {
+        "ROLE": "shell",
+        "SHELL_ID": "C",
+        "MAX_STEPS": "99"
+      },
+      "services": [
+        { "binding": "TRANSITION", "service": "agent-shed-transition" }
+      ]
+    },
+    "recovery": {
+      "vars": {
+        "ROLE": "recovery",
+        "LINE_ID": "demo-line-001"
+      },
+      "triggers": {
+        "crons": ["* * * * *"]
+      },
+      "services": [
+        { "binding": "TRANSITION", "service": "agent-shed-transition" },
+        { "binding": "SHELL_A", "service": "agent-shed-a" },
+        { "binding": "SHELL_B", "service": "agent-shed-b" },
+        { "binding": "SHELL_C", "service": "agent-shed-c" }
+      ]
+    }
+  }
+}

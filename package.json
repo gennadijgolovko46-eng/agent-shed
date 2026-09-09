@@ -1,0 +1,14 @@
+{
+  "name": "agent-shed",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Minimal repeatable shell-shedding protocol for portable agent work continuity.",
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
